@@ -34,7 +34,6 @@ export default function FurnitureStudio() {
   const [showFloor, setShowFloor] = useState(true);
   const [showTooltip, setShowTooltip] = useState(false);
 
-  // --- DYNAMIC COST ENGINE ---
   const costData = useMemo(() => {
     let base = activeProduct.price;
     const addOns = [];
@@ -50,7 +49,6 @@ export default function FurnitureStudio() {
     return { base, addOns, total };
   }, [activeProduct, activeTexture, backStyle, armStyle]);
 
-  // --- PRODUCTION FINALIZE LOGIC ---
   const finalizeBuild = () => {
     const buildSpec = {
       product: activeProduct.name,

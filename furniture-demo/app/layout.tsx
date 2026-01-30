@@ -5,7 +5,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className="flex h-screen overflow-hidden bg-slate-50">
-        <Sidebar /> {/* Sidebar stays here, never re-renders */}
+        <Sidebar /> 
         <main className="flex-1 overflow-y-auto relative">
           {children}
         </main>

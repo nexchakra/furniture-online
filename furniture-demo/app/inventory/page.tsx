@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 
-// Expanded and Fixed Dataset
+
 const PRODUCT_DATA = [
   // CHAIRS
   { 
@@ -53,21 +53,19 @@ const PRODUCT_DATA = [
     specs: { material: 'Walnut / Brass', weight: '28kg', dims: '140 x 70 x 75 cm' }
   },
 
-  // BEDS (Fixed Images)
+  // BEDS
   { 
     id: 'b1', name: 'Luna Platform', type: 'BED', price: '₹92,000', status: 'NEW', 
-    img: 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?q=80', // Reliable Bed Image
+    img: 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?q=80', 
     desc: 'Minimalist platform bed with an integrated oak headboard and LED strip.',
     specs: { material: 'Solid Oak / Fabric', weight: '55kg', dims: '180 x 210 x 35 cm' }
   },
   { 
     id: 'b2', name: 'Velvet Haven', type: 'BED', price: '₹1,15,000', status: 'EXCLUSIVE', 
-    img: 'https://images.unsplash.com/photo-1540518614846-7eded433c457?q=80', // Reliable Luxury Bed Image
+    img: 'https://images.unsplash.com/photo-1540518614846-7eded433c457?q=80', 
     desc: 'Hand-tufted velvet wingback bed for ultimate comfort and luxury.',
     specs: { material: 'Velvet / Pine', weight: '62kg', dims: '200 x 220 x 120 cm' }
-    
   }
-  
 ];
 
 export default function InventoryPage() {
@@ -80,7 +78,6 @@ export default function InventoryPage() {
 
   return (
     <div className="min-h-screen bg-white flex overflow-hidden font-sans">
-      {/* 1. SIDEBAR */}
       <aside className="w-80 border-r border-slate-50 p-12 flex flex-col justify-between bg-white h-screen">
         <div className="space-y-12">
           <div className="flex items-center gap-4">
@@ -106,8 +103,8 @@ export default function InventoryPage() {
           </nav>
         </div>
         
-        <Link href="/configurator" className="flex items-center gap-3 p-5 bg-slate-50 rounded-3xl text-[9px] font-black uppercase tracking-widest text-slate-500 hover:text-indigo-600 transition-all">
-            🏗️ Open 3D Studio
+        <Link href="/" className="flex items-center gap-3 p-5 bg-slate-50 rounded-3xl text-[9px] font-black uppercase tracking-widest text-slate-500 hover:text-indigo-600 transition-all">
+            🏗️ Back to 3D Studio
         </Link>
       </aside>
 
@@ -146,7 +143,6 @@ export default function InventoryPage() {
           ))}
         </div>
 
-        {/* 3. QUICK VIEW POP-UP */}
         {selectedProduct && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 md:p-12 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-300">
             <div className="bg-white w-full max-w-5xl h-[550px] rounded-[50px] overflow-hidden shadow-2xl flex relative animate-in zoom-in-95 duration-500 border border-white/20">
@@ -183,7 +179,7 @@ export default function InventoryPage() {
                 
                 <div className="pt-8 border-t border-slate-50 flex justify-between items-center">
                     <span className="text-3xl font-black italic tracking-tighter text-slate-900">{selectedProduct.price}</span>
-                    <Link href={`/configurator?id=${selectedProduct.id}`} className="px-8 py-4 bg-slate-900 text-white rounded-2xl font-black text-[9px] uppercase tracking-widest hover:bg-indigo-600 transition-all shadow-xl">
+                    <Link href={`/?id=${selectedProduct.id}`} className="px-8 py-4 bg-slate-900 text-white rounded-2xl font-black text-[9px] uppercase tracking-widest hover:bg-indigo-600 transition-all shadow-xl">
                         Launch 3D →
                     </Link>
                 </div>
