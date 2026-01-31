@@ -37,14 +37,11 @@ export default function FurnitureStudio() {
   const costData = useMemo(() => {
     let base = activeProduct.price;
     const addOns = [];
-    
     const tex = TEXTURES.find(t => t.id === activeTexture);
     if (tex && tex.upcharge > 0) addOns.push({ name: `${tex.label} Finish`, price: tex.upcharge });
-    
     if (backStyle === 'cross') addOns.push({ name: 'Artisan Cross Back', price: 4500 });
     if (backStyle === 'ergonomic') addOns.push({ name: 'Ergonomic Curved Shell', price: 3000 });
     if (armStyle === 'executive') addOns.push({ name: 'Executive Padded Arms', price: 3500 });
-
     const total = base + addOns.reduce((acc, curr) => acc + curr.price, 0);
     return { base, addOns, total };
   }, [activeProduct, activeTexture, backStyle, armStyle]);
@@ -62,15 +59,13 @@ export default function FurnitureStudio() {
       valuation: costData.total,
       timestamp: new Date().toISOString()
     };
-
     const blob = new Blob([JSON.stringify(buildSpec, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
     link.download = `BUILD_SHEET_${activeProduct.id.toUpperCase()}.json`;
     link.click();
-    
-    alert(`Configuration Finalized!\nTotal: ₹${costData.total.toLocaleString()}\nProduction data exported.`);
+    alert(`Configuration Finalized!\nTotal: ₹${costData.total.toLocaleString()}`);
   };
 
   const takeScreenshot = () => {
@@ -90,43 +85,63 @@ export default function FurnitureStudio() {
         <div className="flex-1 space-y-10">
           <header className="flex justify-between items-start">
             <div className="space-y-1">
-              <h1 className="text-5xl font-black italic tracking-tighter uppercase text-slate-900 leading-none italic">Studio Pro</h1>
+              <h1 className="text-5xl font-black italic tracking-tighter uppercase text-slate-900 leading-none">Studio Pro</h1>
               <p className="text-indigo-600 text-[10px] font-black uppercase tracking-[0.4em]">Active Terminal</p>
             </div>
-            <button onClick={() => setShowFloor(!showFloor)} className={`px-4 py-2 rounded-xl text-[8px] font-black uppercase border-2 transition-all ${showFloor ? 'bg-indigo-600 text-white border-indigo-600 shadow-lg' : 'border-slate-100 text-slate-400'}`}>
+            {/* Added type and title for A11y */}
+            <button 
+              type="button"
+              title="Toggle floor reflection"
+              onClick={() => setShowFloor(!showFloor)} 
+              className={`px-4 py-2 rounded-xl text-[8px] font-black uppercase border-2 transition-all ${showFloor ? 'bg-indigo-600 text-white border-indigo-600 shadow-lg' : 'border-slate-100 text-slate-400'}`}
+            >
               Reflection: {showFloor ? 'ON' : 'OFF'}
             </button>
           </header>
 
-          {/* Navigation Controls */}
           <div className="space-y-4">
             <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Navigation</p>
             <div className="grid grid-cols-2 gap-4">
               <div className="flex items-center bg-slate-50 p-2 rounded-2xl border border-slate-100">
-                <button onClick={() => setZoom(z => Math.min(8, z + 0.5))} className="w-10 h-10 bg-white rounded-xl shadow-sm font-black text-xl hover:bg-rose-50 transition-colors">-</button>
+                <button type="button" title="Zoom out" onClick={() => setZoom(z => Math.min(8, z + 0.5))} className="w-10 h-10 bg-white rounded-xl shadow-sm font-black text-xl hover:bg-rose-50 transition-colors">-</button>
                 <span className="flex-1 text-center font-black text-[9px] uppercase">Zoom</span>
-                <button onClick={() => setZoom(z => Math.max(2, z - 0.5))} className="w-10 h-10 bg-white rounded-xl shadow-sm font-black text-xl hover:bg-emerald-50 transition-colors">+</button>
+                <button type="button" title="Zoom in" onClick={() => setZoom(z => Math.max(2, z - 0.5))} className="w-10 h-10 bg-white rounded-xl shadow-sm font-black text-xl hover:bg-emerald-50 transition-colors">+</button>
               </div>
               <div className="flex items-center bg-slate-50 p-2 rounded-2xl border border-slate-100">
-                <button onClick={() => setRotation(r => r - 0.5)} className="w-10 h-10 bg-white rounded-xl shadow-sm font-black hover:bg-indigo-50">⟲</button>
+                <button type="button" title="Rotate left" onClick={() => setRotation(r => r - 0.5)} className="w-10 h-10 bg-white rounded-xl shadow-sm font-black hover:bg-indigo-50">⟲</button>
                 <span className="flex-1 text-center font-black text-[9px] uppercase">Rotate</span>
-                <button onClick={() => setRotation(r => r + 0.5)} className="w-10 h-10 bg-white rounded-xl shadow-sm font-black hover:bg-indigo-50">⟳</button>
+                <button type="button" title="Rotate right" onClick={() => setRotation(r => r + 0.5)} className="w-10 h-10 bg-white rounded-xl shadow-sm font-black hover:bg-indigo-50">⟳</button>
               </div>
             </div>
           </div>
 
-          {/* Configuration Options */}
           <div className="space-y-6">
             <div className="space-y-4">
                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Structure & Style</p>
                <div className="grid grid-cols-3 gap-2">
                  {(['classic', 'cross', 'ergonomic'] as const).map(s => (
-                   <button key={s} onClick={() => setBackStyle(s)} className={`py-3 rounded-xl text-[8px] font-black uppercase border-2 transition-all ${backStyle === s ? 'bg-slate-900 text-white border-slate-900 shadow-lg' : 'border-slate-100 text-slate-400 hover:border-slate-200'}`}>{s}</button>
+                   <button 
+                    type="button"
+                    key={s} 
+                    title={`Set back style to ${s}`}
+                    onClick={() => setBackStyle(s)} 
+                    className={`py-3 rounded-xl text-[8px] font-black uppercase border-2 transition-all ${backStyle === s ? 'bg-slate-900 text-white border-slate-900 shadow-lg' : 'border-slate-100 text-slate-400 hover:border-slate-200'}`}
+                   >
+                    {s}
+                   </button>
                  ))}
                </div>
                <div className="grid grid-cols-3 gap-2">
                  {(['none', 'modern', 'executive'] as const).map(s => (
-                   <button key={s} onClick={() => setArmStyle(s)} className={`py-3 rounded-xl text-[8px] font-black uppercase border-2 transition-all ${armStyle === s ? 'bg-slate-900 text-white border-slate-900 shadow-lg' : 'border-slate-100 text-slate-400 hover:border-slate-200'}`}>{s === 'none' ? 'Clean' : s}</button>
+                   <button 
+                    type="button"
+                    key={s} 
+                    title={`Set arm style to ${s}`}
+                    onClick={() => setArmStyle(s)} 
+                    className={`py-3 rounded-xl text-[8px] font-black uppercase border-2 transition-all ${armStyle === s ? 'bg-slate-900 text-white border-slate-900 shadow-lg' : 'border-slate-100 text-slate-400 hover:border-slate-200'}`}
+                   >
+                    {s === 'none' ? 'Clean' : s}
+                   </button>
                  ))}
                </div>
             </div>
@@ -135,7 +150,15 @@ export default function FurnitureStudio() {
                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Material Finish</p>
                <div className="grid grid-cols-3 gap-2">
                  {TEXTURES.map(t => (
-                   <button key={t.id} onClick={() => setActiveTexture(t.id)} className={`py-3 rounded-xl text-[8px] font-black uppercase border-2 transition-all ${activeTexture === t.id ? 'bg-indigo-600 text-white border-indigo-600 shadow-lg' : 'border-slate-100 text-slate-400 hover:border-slate-200'}`}>{t.id}</button>
+                   <button 
+                    type="button"
+                    key={t.id} 
+                    title={`Set material to ${t.label}`}
+                    onClick={() => setActiveTexture(t.id)} 
+                    className={`py-3 rounded-xl text-[8px] font-black uppercase border-2 transition-all ${activeTexture === t.id ? 'bg-indigo-600 text-white border-indigo-600 shadow-lg' : 'border-slate-100 text-slate-400 hover:border-slate-200'}`}
+                   >
+                    {t.id}
+                   </button>
                  ))}
                </div>
             </div>
@@ -144,13 +167,19 @@ export default function FurnitureStudio() {
               <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Color Palette</p>
               <div className="flex gap-4">
                 {PREMIUM_FINISHES.map((c) => (
-                  <button key={c.hex} onClick={() => setActiveColor(c.hex)} style={{ backgroundColor: c.hex }} className={`w-10 h-10 rounded-full border-4 transition-all ${activeColor === c.hex ? 'border-indigo-600 scale-110 shadow-xl' : 'border-transparent hover:scale-105'}`} />
+                  <button 
+                    type="button" // Fix: button-type attribute
+                    key={c.hex} 
+                    title={`Select ${c.name} color`} // Fix: Discernible text
+                    onClick={() => setActiveColor(c.hex)} 
+                    style={{ backgroundColor: c.hex }} 
+                    className={`w-10 h-10 rounded-full border-4 transition-all ${activeColor === c.hex ? 'border-indigo-600 scale-110 shadow-xl' : 'border-transparent hover:scale-105'}`} 
+                  />
                 ))}
               </div>
             </div>
           </div>
 
-          {/* Pricing & Tooltip */}
           <div className="bg-slate-50 p-6 rounded-[35px] border border-slate-100 relative shadow-inner">
             <div 
               onMouseEnter={() => setShowTooltip(true)} 
@@ -178,21 +207,22 @@ export default function FurnitureStudio() {
                       <span>₹{item.price.toLocaleString()}</span>
                     </div>
                   ))}
-                  <div className="pt-2 border-t border-white/10 flex justify-between text-[11px] font-bold text-emerald-400">
-                    <span>Shipping Weight</span>
-                    <span>{activeProduct.weight}</span>
-                  </div>
                 </div>
               </div>
             )}
           </div>
 
-          <button onClick={takeScreenshot} className="w-full py-4 bg-slate-50 text-slate-900 rounded-2xl font-black text-[10px] uppercase tracking-widest border border-slate-200 hover:bg-white flex items-center justify-center gap-2 transition-all">
+          <button 
+            type="button"
+            onClick={takeScreenshot} 
+            className="w-full py-4 bg-slate-50 text-slate-900 rounded-2xl font-black text-[10px] uppercase tracking-widest border border-slate-200 hover:bg-white flex items-center justify-center gap-2 transition-all"
+          >
             📸 Snapshot Gallery
           </button>
         </div>
 
         <button 
+          type="button"
           onClick={finalizeBuild} 
           className="mt-8 w-full py-6 bg-slate-900 text-white font-black rounded-[30px] uppercase text-[10px] tracking-[0.2em] shadow-2xl hover:bg-indigo-600 transition-all active:scale-95"
         >
